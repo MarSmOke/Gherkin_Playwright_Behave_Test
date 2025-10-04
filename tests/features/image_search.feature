@@ -1,0 +1,1 @@
+Feature: Image search functionality
