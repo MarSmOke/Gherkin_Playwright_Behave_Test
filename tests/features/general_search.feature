@@ -12,9 +12,9 @@ Feature: General search functionality
     Given the user is on home page
     When the user searches for 'semrush ai'
     And the user selects the 'Videos' category
-    And the user selects the '<resolution>' resolution
     Then the 'Videos' category should be visually indicated as active
-    And results should include video thumbnail, title, and source
+    When the user selects the '<resolution>' resolution
+    Then results should include video thumbnail, title, and source
 
     Examples:
       | resolution |
