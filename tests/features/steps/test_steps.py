@@ -73,4 +73,4 @@ def verify_url_filters(context, filter_type):
 def verify_url_no_filters(context):
     current_url = context.page.url
     filter_parameters = helpers.get_all_filter_parameters(current_url)
-    assert len(filter_parameters) == 1 # supposed to be {'q': ['semrush ai']}
+    assert len(filter_parameters) == 1, f"Filters not cleared" # supposed to be {'q': ['semrush ai']}
