@@ -126,5 +126,5 @@ def select_image_type(context, image):
 @then("results should include only '{type}'")
 def verify_image_type(context, type):
     image_results = context.page.locator(Locators.IMAGE_SEARCH_RESULTS).all()
-    assert len(image_results) > 0, "No image results with accent colors found"
+    assert len(image_results) > 0, "No image results with selected image type found"
     expect(context.page.locator(Locators.IMAGE_BADGE).first).to_have_text(f'{type}')
