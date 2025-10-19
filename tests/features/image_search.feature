@@ -2,7 +2,7 @@ Feature: Image search functionality
 
   Scenario: Searching images by color
     Given the user is on home page
-    When the user searches for 'prowly ai tools'
+    When the user searches for 'cats'
     And the user selects the 'Images' category
     Then the 'Images' category should be visually indicated as active
     When the user selects the 'Blue' color
@@ -10,16 +10,16 @@ Feature: Image search functionality
 
   Scenario: Verifying preview data
     Given the user is on home page
-    When the user searches for 'prowly ai tools'
+    When the user searches for 'cats'
     And the user selects the 'Images' category
     Then the 'Images' category should be visually indicated as active
     And result previews should have the same aspect ratio
     And result previews should include title and source
 
-  Scenario: Searching photos
+  Scenario: Searching gifs
     Given the user is on home page
-    When the user searches for 'prowly ai tools'
+    When the user searches for 'cats'
     And the user selects the 'Images' category
     Then the 'Images' category should be visually indicated as active
-    When the user selects the 'Photo' type
-    Then results should include only photos
+    When the user selects the 'GIF' type
+    Then results should include only 'GIF'

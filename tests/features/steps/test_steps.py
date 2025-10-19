@@ -55,8 +55,8 @@ def select_resolution(context, value):
 @then("results should include video thumbnail, title, and source")
 def verify_video_elements(context):
     expect(context.page.locator(Locators.VIDEO_THUMBNAIL).first).to_be_visible()
-    expect(context.page.locator(Locators.TITLE).first).to_be_visible()
-    expect(context.page.locator(Locators.SOURCE).first).to_be_visible()
+    expect(context.page.locator(Locators.VIDEO_TITLE).first).to_be_visible()
+    expect(context.page.locator(Locators.VIDEO_SOURCE).first).to_be_visible()
 
 @when("the user clicks Clear all button")
 def clear_all_filters(context):
@@ -73,4 +73,58 @@ def verify_url_filters(context, filter_type):
 def verify_url_no_filters(context):
     current_url = context.page.url
     filter_parameters = helpers.get_all_filter_parameters(current_url)
-    assert len(filter_parameters) == 1, f"Filters not cleared" # supposed to be {'q': ['semrush ai']}
+    assert len(filter_parameters) == 1, f"Filters not cleared" # supposed to be {'q': ['{search_term}']}
+
+@when("the user selects the '{color}' color")
+def select_color(context, color):
+    context.page.locator(Locators.COLOR_FILTER).click()
+    context.page.locator(Locators.COLOR.format(color=color)).click()
+    context.page.wait_for_load_state('load')
+
+@then("results should include images with '{color}' accent")
+def verify_image_color_accent(context, color):
+    image_results = context.page.locator(Locators.IMAGE_SEARCH_RESULTS).all()
+    assert len(image_results) > 0, "No image results with accent colors found"
+    checked = 0
+    matching = 0
+    samples = []
+    for img in image_results[:10]:
+        accent_color = helpers.extract_accent_color(img)
+        if accent_color:
+            checked += 1
+            samples.append(accent_color)
+            if color == 'Blue' and helpers.is_blue_range(accent_color):
+                matching += 1
+    assert checked > 0, "No images with --image-result-accent found"
+    # For the selected color, at least 50% should match
+    if checked > 0:
+        match_rate = (matching / checked) * 100
+        assert match_rate >= 50, \
+            f"Only {match_rate:.1f}% images match '{color}'"
+
+@then("result previews should have the same aspect ratio")
+def verify_aspect_ratio(context):
+    preview_height = int(context.page.locator(Locators.IMAGE_RESULT_PREVIEW).first.get_attribute('height'))
+    preview_width = int(context.page.locator(Locators.IMAGE_RESULT_PREVIEW).first.get_attribute('width'))
+    preview_aspect_ratio = preview_width // preview_height
+    dim_text = context.page.locator(Locators.IMAGE_RESULT_DIMENSIONS).first.text_content()
+    width, height = helpers.parse_dimensions(dim_text)
+    image_aspect_ratio = width // height
+    assert preview_aspect_ratio == image_aspect_ratio, "Preview does not match the image"
+
+@then("result previews should include title and source")
+def verify_image_elements(context):
+    expect(context.page.locator(Locators.IMAGE_TITLE).first).to_be_visible()
+    expect(context.page.locator(Locators.IMAGE_SOURCE).first).to_be_visible()
+
+@when("the user selects the '{image}' type")
+def select_image_type(context, image):
+    context.page.locator(Locators.TYPE_FILTER).click()
+    context.page.locator(Locators.FILTER_VALUE.format(value=image)).click()
+    context.page.wait_for_load_state('load')
+
+@then("results should include only '{type}'")
+def verify_image_type(context, type):
+    image_results = context.page.locator(Locators.IMAGE_SEARCH_RESULTS).all()
+    assert len(image_results) > 0, "No image results with accent colors found"
+    expect(context.page.locator(Locators.IMAGE_BADGE).first).to_have_text(f'{type}')
