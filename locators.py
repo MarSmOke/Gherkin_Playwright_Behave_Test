@@ -3,7 +3,7 @@ class Locators:
     HOME_PAGE = 'https://ecosia.org/' # not in separate file because there is only one
 
     # Search elements
-    SEARCH_INPUT = 'input[placeholder="Search the web..."]'
+    SEARCH_INPUT = 'textarea[placeholder="Search the web..."]'
     SEARCH_BUTTON = 'button[type="submit"]'
 
     # Filters

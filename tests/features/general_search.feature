@@ -1,5 +1,7 @@
+@allure.feature:General_Search
 Feature: General search functionality
 
+  @allure.id:1
   Scenario: Searching latest news
     Given the user is on home page
     When the user searches for 'cats'
@@ -8,6 +10,7 @@ Feature: General search functionality
     When the user selects the 'Past 24 hours' time
     Then results should be within 1 day range
 
+  @allure.id:2
   Scenario Outline: Searching video
     Given the user is on home page
     When the user searches for 'cats'
@@ -22,6 +25,7 @@ Feature: General search functionality
       | 720p       |
       | 1080p      |
 
+  @allure.id:3
   Scenario: Verifying 'Clear all' button
     Given the user is on home page
     When the user searches for 'cats'
