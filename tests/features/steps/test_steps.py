@@ -1,7 +1,7 @@
 from behave import given, when, then
 from playwright.sync_api import expect
 from locators import Locators
-from utils import helpers
+from utils import helpers, curl
 import allure
 
 
@@ -147,3 +147,11 @@ def verify_image_type(context, type):
     image_results = context.page.locator(Locators.IMAGE_SEARCH_RESULTS).all()
     assert len(image_results) > 0, "No image results with selected image type found"
     expect(context.page.locator(Locators.IMAGE_BADGE).first).to_have_text(f'{type}')
+
+@when("the user sends curl request '{curl_command}' and gets response '{response_name}'")
+@allure.step ("Execute curl request '{curl_command}' and get response '{response_name}'")
+def send_curl_request_and_get_response(context, curl_command, response_name):
+    resolved_curl = curl.curl_resolver(context, curl_command)
+    result = curl.execute_curl(resolved_curl)
+    curl.compose_request_object(context, resolved_curl, response_name)
+    curl.compose_response_object(context, response_name, result)

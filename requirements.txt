@@ -2,3 +2,4 @@ playwright
 behave
 allure-behave
 allure-python-commons
+requests
